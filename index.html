@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhikr Counter</title>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=League+Gothic&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, rgba(71, 77, 90, 0.8), rgba(145, 136, 143, 0.8)),
+                url('bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+            position: relative;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+        }
+
+        h1 {
+            color: #F49876;
+            font-weight: bold;
+            line-height: 50px;
+        }
+
+        p {
+            color: white;
+            font-weight: 400;
+        }
+
+        .counter {
+            font-size: 80px;
+            font-family: 'League Gothic', sans-serif;
+            font-weight: bold;
+            background: linear-gradient(to bottom, #F49876, #FFE0DD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-btn {
+            width: 180px;
+            height: 180px;
+            background: #798A9B;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 6px 6px 12px #5B6A7A, -6px -6px 12px #9AAABC;
+            margin: 20px auto;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .main-btn:active {
+            box-shadow: inset 4px 4px 8px #5B6A7A, inset -4px -4px 8px #9AAABC;
+        }
+
+        .small-btn {
+            background: #798A9B;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 5px 5px 10px #5B6A7A, -5px -5px 10px #9CA6B3;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+        .dua-menu {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .dua-menu div {
+            margin: 10px 0;
+            color: #F49876;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Logo" class="logo">
+        <h1 id="duaText">سبحان الله</h1>
+        <p>Dua Counter</p>
+        <div class="counter" id="counter">0</div>
+        <div class="main-btn" onclick="incrementCounter()"></div>
+        <div class="buttons">
+            <div class="small-btn" onclick="resetCounter()"><img src="Group.png" alt="reset"></div>
+            <div class="small-btn" onclick="toggleSound()"><img src="Vector-1.png" alt="sound" class="sound"></div>
+            <div class="small-btn" onclick="openMenu()"><img src="Vector.png" alt="select"></div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="dua-menu">
+            <div onclick="selectDua('سبحان الله')">التسبيح</div>
+            <div onclick="selectDua('الله أكبر')">التكبير</div>
+            <div
+                onclick="selectDua(' اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك وأنا على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت، أبوء لك بنعمتك علي وأبوء بذنبي فاغفر لي فإنه لا يغفر الذنوب إلا أنت')">
+                دعاء المغفرة</div>
+            <div onclick="selectDua('  اللهم اكفني بحلالك عن حرامك، وأغنني بفضلك عمن سواك')">دعاء الرزق</div>
+            <div onclick="selectDua('  اللهم إني قد ظلمت نفسي ظلما كثيرا ولا يغفر الذنوب الا أنت، اغفر لي ذنوبي')">دعاء
+                التوبة</div>
+            <div onclick="selectDua('  اللهم نسألك باسمك الشافي أن تكتب لنا الشفاء العاجل وأن ترحمنا يا رب العالمين')">
+                دعاء الشفاء</div>
+            <div onclick="selectDua('أسماء الله الحسنى')">أسماء الله الحسنى</div>
+        </div>
+    </div>
+    <audio id="clickSound" src="click.mp3"></audio>
+    <script>
+        let counter = 0;
+        let soundEnabled = true;
+
+        function incrementCounter() {
+            counter++;
+            document.getElementById("counter").textContent = counter;
+            if (soundEnabled) document.getElementById("clickSound").play();
+        }
+
+        function resetCounter() {
+            counter = 0;
+            document.getElementById("counter").textContent = counter;
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            let soundBtnImg = document.querySelector(".small-btn .sound");
+
+            // Change the image based on sound state
+            soundBtnImg.src = soundEnabled ? "Vector-1.png" : "Vector-2.png";
+        }
+
+
+        function openMenu() {
+            document.getElementById("overlay").style.visibility = "visible";
+        }
+
+        function selectDua(dua) {
+            document.getElementById("duaText").textContent = dua;
+            document.getElementById("overlay").style.visibility = "hidden";
+        }
+    </script>
+</body>
+
+</html>
