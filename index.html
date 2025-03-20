@@ -72,6 +72,12 @@
             box-shadow: inset 4px 4px 8px #5B6A7A, inset -4px -4px 8px #9AAABC;
         }
 
+        * {
+
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
         .small-btn {
             background: #798A9B;
             border-radius: 50%;
@@ -102,6 +108,16 @@
             align-items: center;
             justify-content: center;
             visibility: hidden;
+            opacity: 0;
+            transform: scale(0.6);
+            /* Starts smaller */
+            transition: opacity 0.3s ease, transform 0.6s ease;
+        }
+
+        .overlay.show {
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .dua-menu {
@@ -127,19 +143,18 @@
         <h1 id="duaText">سبحان الله</h1>
         <p>Dua Counter</p>
         <div class="counter" id="counter">0</div>
-        <div class="main-btn" onclick="incrementCounter()"></div>
+        <div class="main-btn" onclick="incrementCounter()" draggable="false"></div>
         <div class="buttons">
             <div class="small-btn" onclick="resetCounter()"><img src="Group.png" alt="reset"></div>
             <div class="small-btn" onclick="toggleSound()"><img src="Vector-1.png" alt="sound" class="sound"></div>
             <div class="small-btn" onclick="openMenu()"><img src="Vector.png" alt="select"></div>
         </div>
     </div>
-    <div class="overlay" id="overlay">
+    <div class="overlay" id="overlay" onclick="closeMenu()">
         <div class="dua-menu">
             <div onclick="selectDua('سبحان الله')">التسبيح</div>
             <div onclick="selectDua('الله أكبر')">التكبير</div>
-            <div
-                onclick="selectDua('أستغفر الله العظيم و أتوب إليه ')">
+            <div onclick="selectDua('أستغفر الله العظيم و أتوب إليه ')">
                 الإستغفار</div>
             <div onclick="selectDua('  اللهم اكفني بحلالك عن حرامك، وأغنني بفضلك عمن سواك')">دعاء الرزق</div>
             <div onclick="selectDua('  اللهم إني قد ظلمت نفسي ظلما كثيرا ولا يغفر الذنوب الا أنت، اغفر لي ذنوبي')">دعاء
@@ -180,8 +195,17 @@
 
         function selectDua(dua) {
             document.getElementById("duaText").textContent = dua;
-            document.getElementById("overlay").style.visibility = "hidden";
+            //document.getElementById("overlay").style.visibility = "hidden";
         }
+
+        function openMenu() {
+            document.getElementById("overlay").classList.add("show");
+        }
+
+        function closeMenu() {
+            document.getElementById("overlay").classList.remove("show");
+        }
+
     </script>
 </body>
 
