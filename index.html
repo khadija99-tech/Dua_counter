@@ -10,19 +10,28 @@
         rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to bottom, rgba(71, 77, 90, 0.8), rgba(145, 136, 143, 0.8)),
-                url('bg.png');
+            background: url('bg.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            flex-direction: column;
-            position: relative;
-            font-family: 'Cairo', sans-serif;
         }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top,
+                    #F49876 4%,
+                    #9D7368 20%,
+                    #474D5A 84%);
+            opacity: 0.7;
+            /* Adjust for visibility */
+            z-index: -1;
+        }
+
 
         .container {
             text-align: center;
@@ -110,15 +119,23 @@
             visibility: hidden;
             opacity: 0;
             transform: scale(0.6);
-            /* Starts smaller */
             transition: opacity 0.3s ease, transform 0.6s ease;
         }
 
-        .overlay.show {
+        /* When overlay is active (visible) */
+        .overlay.active {
             visibility: visible;
             opacity: 1;
             transform: scale(1);
         }
+
+        /* When overlay is hidden (fade out smoothly) */
+        .overlay.hiding {
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity 0.3s ease, transform 0.6s ease;
+        }
+
 
         .dua-menu {
             background: rgba(255, 255, 255, 0.2);
@@ -188,23 +205,24 @@
             soundBtnImg.src = soundEnabled ? "Vector-1.png" : "Vector-2.png";
         }
 
-
         function openMenu() {
-            document.getElementById("overlay").style.visibility = "visible";
+            let overlay = document.getElementById("overlay");
+            overlay.classList.add("active");  // Use class instead of style.visibility
         }
+        function closeMenu() {
+            let overlay = document.getElementById("overlay");
+            overlay.classList.add("hiding"); // Start fade-out animation
 
+            setTimeout(() => {
+                overlay.classList.remove("active", "hiding"); // Remove classes after animation ends
+            }, 600); // Must match transition duration
+        }
         function selectDua(dua) {
             document.getElementById("duaText").textContent = dua;
             //document.getElementById("overlay").style.visibility = "hidden";
         }
 
-        function openMenu() {
-            document.getElementById("overlay").classList.add("show");
-        }
 
-        function closeMenu() {
-            document.getElementById("overlay").classList.remove("show");
-        }
 
     </script>
 </body>
